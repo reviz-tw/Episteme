@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+bin/
+web/node_modules/
+web/.next/
+web/out/
+web/tsconfig.tsbuildinfo
+data/
+coverage.out
+test-results/
+.DS_Store
+.local/

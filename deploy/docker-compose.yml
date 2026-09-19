@@ -1,0 +1,70 @@
+services:
+  postgres:
+    image: postgres:18-bookworm
+    environment:
+      POSTGRES_DB: episteme
+      POSTGRES_USER: episteme
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes: [postgres:/var/lib/postgresql]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U episteme -d episteme"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+  qdrant:
+    image: qdrant/qdrant:v1.17.0
+    volumes: [qdrant:/qdrant/storage]
+    restart: unless-stopped
+  embedding:
+    image: ${TEI_IMAGE:-ghcr.io/huggingface/text-embeddings-inference:cpu-1.9}
+    command: [--model-id, "${EMBEDDING_MODEL:-BAAI/bge-m3}", --max-client-batch-size, "32"]
+    environment:
+      AUTO_TRUNCATE: "false"
+    volumes: [models:/data]
+    restart: unless-stopped
+  reranker:
+    image: ${TEI_IMAGE:-ghcr.io/huggingface/text-embeddings-inference:cpu-1.9}
+    command: [--model-id, BAAI/bge-reranker-v2-m3]
+    volumes: [models:/data]
+    restart: unless-stopped
+  api:
+    build: {context: .., dockerfile: deploy/Dockerfile.api}
+    environment:
+      DATABASE_URL: "postgres://episteme:${POSTGRES_PASSWORD}@postgres:5432/episteme?sslmode=disable"
+      LISTEN_ADDR: 0.0.0.0:8080
+      APP_ORIGIN: ${APP_ORIGIN:-http://localhost:3000}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      QDRANT_HOST: qdrant
+      TEI_EMBED_URL: http://embedding:80
+      TEI_RERANK_URL: http://reranker:80
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-BAAI/bge-m3}
+      EMBEDDING_DIMENSION: ${EMBEDDING_DIMENSION:-1024}
+      MCP_TOKEN: ${MCP_TOKEN:-}
+      METADATA_ENABLED: ${METADATA_ENABLED:-true}
+      METADATA_OLLAMA_URL: http://metadata:11434
+      METADATA_MODEL: ${METADATA_MODEL:-gemma2:2b}
+    ports: ["127.0.0.1:8080:8080"]
+    depends_on:
+      postgres: {condition: service_healthy}
+      qdrant: {condition: service_started}
+      embedding: {condition: service_started}
+      reranker: {condition: service_started}
+    restart: unless-stopped
+  metadata:
+    image: ${OLLAMA_IMAGE:-ollama/ollama:0.5.7}
+    environment:
+      OLLAMA_NUM_PARALLEL: 1
+      OLLAMA_NO_CLOUD: 1
+    volumes: [metadata_models:/root/.ollama]
+    restart: unless-stopped
+  web:
+    build: {context: .., dockerfile: deploy/Dockerfile.web}
+    ports: ["127.0.0.1:3000:3000"]
+    depends_on: [api]
+    restart: unless-stopped
+volumes:
+  postgres:
+  qdrant:
+  models:
+  metadata_models:
