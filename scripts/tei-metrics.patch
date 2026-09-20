@@ -1,0 +1,14 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 366901f..f63449b 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -2506,7 +2506,7 @@ dependencies = [
+ [[package]]
+ name = "metrics"
+-version = "0.23.0"
++version = "0.23.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "884adb57038347dfbaf2d5065887b6cf4312330dc8e94bc30a1a839bd79d3261"
++checksum = "3045b4193fbdc5b5681f32f11070da9be3609f189a79f3390706d42587f46bb5"
+ dependencies = [
+  "ahash",

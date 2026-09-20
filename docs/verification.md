@@ -101,3 +101,20 @@
 6. 停止 Qdrant，再提交作業；重啟 Qdrant、繼續作業，驗證持久化重試。
 7. 暫停全庫重建、重啟 API、繼續作業，確認進度延續。
 8. 配置 MCP bearer token 或 Stdio binary，實際呼叫 tools 與原文 resource。
+
+## 原生安裝與完整啟停腳本（2026-09-20）
+
+- 在這台 Apple Silicon / macOS 27 實際執行 `INSTALL.sh`：安裝缺少的 Poppler、CMake、Protobuf 等依賴，下載並校驗固定 Go 1.26.5、Node 24.14.0、Ollama 0.5.7 官方發行檔。Qdrant 1.17.0 沿用既有執行檔並驗證版本。
+- 將舊 TEI 執行檔另外備份後，讓安裝器從固定 commit 重新建置 TEI 1.9.0 Metal；Rust 1.92.0、metrics 0.23.1 的 Cargo.lock patch 實際編譯成功。三個 Go 指令、Next.js 正式建置、安裝完整性檢查通過。
+- 三個模型沿用現有快取並完整讀取雜湊校驗；另以實際官方小型檔案驗證 Hugging Face 和 Ollama registry 的全新下載與離線快取沿用。未在另一台全新機器重新下載全部 6.2 GB 權重；Homebrew 首裝／Apple 工具授權分支未實跑。
+- `make test-scripts` 的 11 項隔離測試通過：設定保留與檔案權限、port 衝突、TIME_WAIT 重啟、過期 PID 不誤殺、重複啟動、啟動失敗回復、健康檢查逾時、互斥鎖、非空資料庫目錄保護、模型損壞檢查、固定本機 TEI 模型路徑。
+- `start.sh` 實際啟動 PostgreSQL、Qdrant、兩個 TEI、Ollama、Go API、Next.js；七個服務均 ready。再次 start 保持七個 PID 不變；服務執行中重新安裝會明確拒絕建置。
+- 真實模型推論通過：Embedding 回傳 1024 維有限數值、rerank 回傳兩個合法分數、Gemma 依 JSON schema 回傳 JSON。使用暫存 PDF 驗證 `pdftotext` 可擷取文字，沒有把測試文件上傳到文件庫。
+- 完整停止釋放 8 個 TCP 監聽 port。刻意保留未送完 HTTP headers 的瀏覽器連線時，修正後整套約 11 秒完成停止；隨即執行完整 restart 並成功回到七個服務 ready。停止處理保留 Next.js 正常清理，超過 10 秒才結束該 Web 程序；port 探測允許 TIME_WAIT，仍拒絕其他監聽程序。
+- 既有資料庫先備份至 `.local/backups/before-managed-stack.dump`，還原到 `.local/postgres`；此機 config 使用 55440 避開原暫存 PostgreSQL，新安裝預設為 55439。瀏覽器沿用原登入帳號，工作台文件 0、切片 0、四個模型／向量狀態皆正常。SQL 確認保留 1 個帳號，文件、切片及作業皆 0。
+- 本次驗證範圍為原生 Mac；不代表 Docker、其他 OS、其他 Xcode／硬體版本或大量文件負載已完成驗收。
+
+## 提交與本機模型清理（2026-09-20）
+
+- 驗證完成後依使用者要求停止全部本機服務，移除 `.local/models`、`.local/model-links`、`.local/ollama/models` 及 `.local/hf` 模型快取；保留程式、資料庫、帳號、設定、向量儲存與備份。
+- 提交前再次通過 11 項隔離腳本測試、Shell／Node 語法檢查與 Git whitespace 檢查。模型移除後不再啟動服務；日後使用 `./INSTALL.sh --models-only` 重新下載及校驗，再執行 `./start.sh`。

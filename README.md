@@ -4,6 +4,21 @@
 
 ## 快速開始
 
+Apple Silicon Mac（macOS 15+）可直接安裝原生服務與全部模型：
+
+```sh
+./INSTALL.sh
+./start.sh
+# 檢查 / 停止 / 重啟
+./start.sh status
+./start.sh stop
+./start.sh restart
+```
+
+安裝器會安裝缺少的套件、下載並校驗三個模型、建置 API/MCP/前端。啟動器依序啟動 PostgreSQL、Qdrant、Embedding、Reranker、Ollama、API、Web，等待健康檢查成功後才回報完成。開啟 <http://localhost:3000>。首次需要 Xcode 與 Metal 編譯工具；Apple 工具授權或 Homebrew 首次管理員驗證可能需要手動完成。完整版本、資料保存及排錯方式見 [本機安裝指南](docs/local-macos.md)。
+
+### Docker Compose
+
 需要 Docker Compose。預設 TEI CPU 映像適用於 Linux x86_64；Apple Silicon 可將 `.env` 的 `TEI_IMAGE` 設為 `ghcr.io/huggingface/text-embeddings-inference:cpu-arm64-1.9`，或連接另一台 Linux 主機上的 TEI。首次啟動需下載映像與模型；模型快取準備完成後才可離線執行。
 
 ```sh
@@ -54,7 +69,7 @@ API 可使用 `PATCH /api/v1/documents/{id}`，傳入 `{ "revision": 目前文�
 
 ## 本機開發
 
-Apple Silicon 可使用 [macOS 原生服務指南](docs/local-macos.md) 啟動 TEI Metal 與 Qdrant，再執行下方 API / Web。已安裝執行檔時，`./scripts/local-services.sh start` 啟動，`status` 檢查健康，`stop` 停止。
+Apple Silicon 日常使用請用 [macOS 原生服務指南](docs/local-macos.md) 的 `INSTALL.sh` / `start.sh`。以下為手動開發流程，設定與原生腳本的 `.local/config.json` 分開；同時啟動前須避免 port 衝突。
 
 需要 Go 1.26+、Node.js 24+、PostgreSQL 18，以及 Qdrant 1.17+ / 兩個 TEI 服務。PDF 另需 Poppler (`pdftotext`)。
 

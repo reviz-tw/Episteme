@@ -11,3 +11,4 @@ coverage.out
 test-results/
 .DS_Store
 .local/
+__pycache__/

@@ -1,0 +1,135 @@
+{
+  "huggingface": [
+    {
+      "repo": "BAAI/bge-m3",
+      "revision": "5617a9f61b028005a4858fdac845db406aefb181",
+      "files": [
+        {
+          "path": "1_Pooling/config.json",
+          "size": 191,
+          "hash": "9bd85925f325e25246d94c4918dc02ab98f2a1b7",
+          "algorithm": "git-sha1"
+        },
+        {
+          "path": "config.json",
+          "size": 687,
+          "hash": "e6eda1c72da8f9dc30fdd9b69c73d35af3b7a7ad",
+          "algorithm": "git-sha1"
+        },
+        {
+          "path": "config_sentence_transformers.json",
+          "size": 123,
+          "hash": "1fba91c78a6c8e17227058ab6d4d3acb5d8630a9",
+          "algorithm": "git-sha1"
+        },
+        {
+          "path": "modules.json",
+          "size": 349,
+          "hash": "952a9b81c0bfd99800fabf352f69c7ccd46c5e43",
+          "algorithm": "git-sha1"
+        },
+        {
+          "path": "pytorch_model.bin",
+          "size": 2271145830,
+          "hash": "b5e0ce3470abf5ef3831aa1bd5553b486803e83251590ab7ff35a117cf6aad38",
+          "algorithm": "sha256"
+        },
+        {
+          "path": "sentence_bert_config.json",
+          "size": 54,
+          "hash": "0140ba1eac83a3c9b857d64baba91969d988624b",
+          "algorithm": "git-sha1"
+        },
+        {
+          "path": "special_tokens_map.json",
+          "size": 964,
+          "hash": "b1879d702821e753ffe4245048eee415d54a9385",
+          "algorithm": "git-sha1"
+        },
+        {
+          "path": "tokenizer.json",
+          "size": 17098108,
+          "hash": "21106b6d7dab2952c1d496fb21d5dc9db75c28ed361a05f5020bbba27810dd08",
+          "algorithm": "sha256"
+        },
+        {
+          "path": "tokenizer_config.json",
+          "size": 444,
+          "hash": "dc69ac559dcba2694012009aaa108c614541789a",
+          "algorithm": "git-sha1"
+        }
+      ]
+    },
+    {
+      "repo": "BAAI/bge-reranker-v2-m3",
+      "revision": "953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e",
+      "files": [
+        {
+          "path": "config.json",
+          "size": 795,
+          "hash": "9f62673cb00ec41dcec8947b9ed16f6f2eb23ba2",
+          "algorithm": "git-sha1"
+        },
+        {
+          "path": "model.safetensors",
+          "size": 2271071852,
+          "hash": "d9e3e081faff1eefb84019509b2f5558fd74c1a05a2c7db22f74174fcedb5286",
+          "algorithm": "sha256"
+        },
+        {
+          "path": "special_tokens_map.json",
+          "size": 964,
+          "hash": "b1879d702821e753ffe4245048eee415d54a9385",
+          "algorithm": "git-sha1"
+        },
+        {
+          "path": "tokenizer.json",
+          "size": 17098273,
+          "hash": "69564b696052886ed0ac63fa393e928384e0f8caada38c1f4864a9bfbf379c15",
+          "algorithm": "sha256"
+        },
+        {
+          "path": "tokenizer_config.json",
+          "size": 1173,
+          "hash": "328a00a9a560aadcf2a3064f917517359eb3cc26",
+          "algorithm": "git-sha1"
+        }
+      ]
+    }
+  ],
+  "ollama": {
+    "name": "gemma2:2b",
+    "digest": "8ccf136fdd5298f3ffe2d69862750ea7fb56555fa4d5b18c04e3fa4d82ee09d7",
+    "manifest": {
+      "schemaVersion": 2,
+      "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+      "config": {
+        "mediaType": "application/vnd.docker.container.image.v1+json",
+        "digest": "sha256:e18ad7af7efbfaecd8525e356861b84c240ece3a3effeb79d2aa7c0f258f71bd",
+        "size": 487
+      },
+      "layers": [
+        {
+          "mediaType": "application/vnd.ollama.image.model",
+          "digest": "sha256:7462734796d67c40ecec2ca98eddf970e171dbb6b370e43fd633ee75b69abe1b",
+          "size": 1629509152
+        },
+        {
+          "mediaType": "application/vnd.ollama.image.template",
+          "digest": "sha256:e0a42594d802e5d31cdc786deb4823edb8adff66094d49de8fffe976d753e348",
+          "size": 358
+        },
+        {
+          "mediaType": "application/vnd.ollama.image.license",
+          "digest": "sha256:097a36493f718248845233af1d3fefe7a303f864fae13bc31a3a9704229378ca",
+          "size": 8433
+        },
+        {
+          "mediaType": "application/vnd.ollama.image.params",
+          "digest": "sha256:2490e7468436707d5156d7959cf3c6341cc46ee323084cfa3fcf30fe76e397dc",
+          "size": 65
+        }
+      ]
+    }
+  }
+}
